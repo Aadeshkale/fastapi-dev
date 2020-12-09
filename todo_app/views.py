@@ -1,3 +1,4 @@
+import uuid
 from todo_app.main import app
 from models import Todo
 from pydantic_models import Py_Todo
@@ -13,8 +14,9 @@ async def index():
 @app.post('/todo/add/')
 async def create(data: Py_Todo):
     # writing data into mongodb
+    uid = str(uuid.uuid4())
     task = data.todo
-    op = Todo(todo_info=task).save()
+    op = Todo(id=uid, todo_info=task).save()
     res = dict()
     res['id'] = op.id
     res['date_modified'] = op.date_modified
